@@ -8,7 +8,7 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [workspace]
-members = [ "zip-parser", "memutils" ]
+members = ["zip-parser", "memutils"]
 
 [features]
 default = ["zstd-sys"]
@@ -22,7 +22,7 @@ anyhow = "1"
 argh = "0.1"
 bstr = "1"
 memutils = { path = "memutils" }
-tinyvec = { version = "1", features = [ "std" ] }
+tinyvec = { version = "1", features = ["std"] }
 
 # fast
 rayon = "1"
@@ -33,6 +33,7 @@ crc32fast = "1"
 
 # compress
 flate2 = "1"
+zstd = { version = "0.13", features = ["pkg-config"], optional = true }
 
 # encoding
 encoding_rs = "0.8"
@@ -53,7 +54,7 @@ zip = { version = "4", default-features = false, features = ["deflate"] }
 tempfile = "3"
 assert_cmd = "2"
 walkdir = "2"
-criterion = "0.4"
+criterion = "0.5"
 
 [[bench]]
 name = "decomp-with-volatile"

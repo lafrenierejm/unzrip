@@ -1,5 +1,6 @@
 [package]
 name = "unzrip"
+description = "Unzip implementation with parallel decompression and automatic detection encoding"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"

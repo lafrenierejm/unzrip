@@ -8,11 +8,11 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [workspace]
-members = [ "zip-parser" ]
+members = ["zip-parser"]
 
 [features]
-default = [ "zstd-sys" ]
-zstd-sys = [ "zstd" ]
+default = ["zstd-sys"]
+zstd-sys = ["zstd"]
 
 [dependencies]
 zip-parser = { path = "zip-parser" }
@@ -31,7 +31,7 @@ crc32fast = "1"
 
 # compress
 flate2 = "1"
-zstd = { version = "0.12", features = [ "pkg-config" ], optional = true }
+zstd = { version = "0.12", features = ["pkg-config"], optional = true }
 
 # encoding
 encoding_rs = "0.8"
@@ -42,7 +42,7 @@ time = "0.3"
 filetime = "0.2"
 
 [dev-dependencies]
-zip = { version = "0.6", default-features = false, features = [ "deflate" ] }
+zip = { version = "0.6", default-features = false, features = ["deflate"] }
 tempfile = "3"
 assert_cmd = "2"
 walkdir = "2"

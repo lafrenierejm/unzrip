@@ -84,7 +84,7 @@ fn unzip(encoding: FilenameEncoding, target_dir: &Path, path: &Path) -> anyhow::
             acc
         }))?
         .par_iter()
-        .try_for_each(|cfh| do_entry(encoding, &zip, &cfh, target_dir))?;
+        .try_for_each(|cfh| do_entry(encoding, &zip, cfh, target_dir))?;
 
     Ok(())
 }
@@ -112,7 +112,7 @@ fn do_entry(
         let path = encoding.decode(name)?;
         do_dir(target_dir, &path)?
     } else {
-        let path = encoding.decode(&name)?;
+        let path = encoding.decode(name)?;
         do_file(cfh, target_dir, &path, buf)?;
     }
 

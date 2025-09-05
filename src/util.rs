@@ -123,7 +123,7 @@ pub fn dos2time(dos_date: u16, dos_time: u16)
         sec.try_into().context("sec cast")?
     )?;
     let date = time::Date::from_calendar_date(
-        year.try_into().context("year cast")?,
+        year.into(),
         mon,
         day.try_into().context("day cast")?
     )?;

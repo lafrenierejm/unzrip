@@ -75,7 +75,7 @@ fn unzip(encoding: FilenameEncoding, target_dir: &Path, path: &Path) -> anyhow::
     };
 
     let zip = ZipArchive::parse(&buf)?;
-    let len: usize = zip.eocdr().cd_entries.try_into()?;
+    let len: usize = zip.eocdr().cd_entries.into();
     let len = cmp::min(len, 128);
 
     zip.entries()?

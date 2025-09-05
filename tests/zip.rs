@@ -60,15 +60,15 @@ fn test_simple_zip_file() -> anyhow::Result<()> {
         let fd = fs::File::create(&path)?;
         let mut writer = ZipWriter::new(fd);
 
-        writer.start_file("Cargo.toml", Default::default())?;
+        writer.start_file::<&str, ()>("Cargo.toml", Default::default())?;
         io::copy(&mut fs::File::open("Cargo.toml")?, &mut writer)?;
 
-        writer.add_directory("lock/", Default::default())?;
-        writer.start_file("lock/Cargo.lock", Default::default())?;
+        writer.add_directory::<&str, ()>("lock/", Default::default())?;
+        writer.start_file::<&str, ()>("lock/Cargo.lock", Default::default())?;
         io::copy(&mut fs::File::open("Cargo.lock")?, &mut writer)?;
 
-        writer.add_symlink("lock/Cargo.toml", "Cargo.toml", Default::default())?;
-        writer.add_directory("lock2\\", Default::default())?;
+        writer.add_symlink::<&str, &str, ()>("lock/Cargo.toml", "Cargo.toml", Default::default())?;
+        writer.add_directory::<&str, ()>("lock2\\", Default::default())?;
 
         writer.finish()?;
     }
@@ -121,7 +121,7 @@ fn test_encoding_filename() -> anyhow::Result<()> {
             String::from_utf8_unchecked(name2)
         };
 
-        writer.start_file(bad_name, Default::default())?;
+        writer.start_file::<String, ()>(bad_name, Default::default())?;
 
         let name = "かんじ";
         let (name2, _, _) = encoding_rs::SHIFT_JIS.encode(name);
@@ -133,7 +133,7 @@ fn test_encoding_filename() -> anyhow::Result<()> {
             String::from_utf8_unchecked(name2)
         };
 
-        writer.start_file(bad_name, Default::default())?;
+        writer.start_file::<String, ()>(bad_name, Default::default())?;
 
         writer.finish()?;
     }
@@ -176,7 +176,7 @@ fn test_unix_filename() -> anyhow::Result<()> {
             String::from_utf8_unchecked(name.clone())
         };
 
-        writer.start_file(bad_name, Default::default())?;
+        writer.start_file::<String, ()>(bad_name, Default::default())?;
 
         writer.finish()?;
     }
@@ -212,7 +212,7 @@ fn test_evil_path() -> anyhow::Result<()> {
         let fd = fs::File::create(&path)?;
         let mut writer = ZipWriter::new(fd);
 
-        writer.start_file("/home/user/.bashrc", Default::default())?;
+        writer.start_file::<&str, ()>("/home/user/.bashrc", Default::default())?;
         writer.finish()?;
     }
 
@@ -241,7 +241,7 @@ fn test_evil_path2() -> anyhow::Result<()> {
         let fd = fs::File::create(&path)?;
         let mut writer = ZipWriter::new(fd);
 
-        writer.start_file("../../../../../../../../.bashrc", Default::default())?;
+        writer.start_file::<&str, ()>("../../../../../../../../.bashrc", Default::default())?;
         writer.finish()?;
     }
 

@@ -15,7 +15,14 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        features:
+          - "--no-default-features"
+          - "" # default
+          - "--all-features"
 
     runs-on: ${{ matrix.os }}
 
@@ -23,7 +30,6 @@ jobs:
       RUSTFLAGS: "-D warnings"
 
     steps:
-      - uses: actions/checkout@master
-      - name: minimum feature
-        run: |
-          cargo test --no-default-features
+      - uses: actions/checkout@v5
+      - name: cargo test ${{ matrix.features }}
+        run: cargo test ${{ matrix.features }}

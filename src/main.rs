@@ -86,7 +86,7 @@ fn unzip(options: &Options, encoding: FilenameEncoding, target_dir: &Path, path:
     };
     let buf = memutils::slice::from_slice(&buf);
 
-    let zip = ZipArchive::parse(&buf)?;
+    let zip = ZipArchive::parse(buf)?;
     let len: usize = zip.eocdr().cd_entries().context("cd entries overwrite")?;
     let len = cmp::min(len, 128);
 
@@ -96,7 +96,7 @@ fn unzip(options: &Options, encoding: FilenameEncoding, target_dir: &Path, path:
             acc
         }))?
         .par_iter()
-        .try_for_each(|cfh| do_entry(options, encoding, &zip, &cfh, target_dir))?;
+        .try_for_each(|cfh| do_entry(options, encoding, &zip, cfh, target_dir))?;
 
     Ok(())
 }
@@ -122,7 +122,7 @@ fn do_entry(
     {
         #[cfg(unix)]
         let name = name.trim_end_with(|c| c == '\\');
-        let path = encoding.decode(&name)?;
+        let path = encoding.decode(name)?;
         do_dir(target_dir, &path)?
     } else {
         let path = encoding.decode(&name)?;
@@ -191,7 +191,7 @@ fn do_file(
         }
     };
     // prevent zipbomb
-    let reader = reader.take(cfh.uncomp_size.into());
+    let reader = reader.take(cfh.uncomp_size);
     let mut reader = Crc32Checker::new(reader, cfh.crc32);
 
     let mtime = {

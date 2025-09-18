@@ -17,11 +17,7 @@ impl<'a> Read for ReadOnlyReader<'a> {
         let len = cmp::min(self.0.len(), buf.len());
         let (x, y) = self.0.split_at(len);
 
-        #[cfg(not(unzrip_i_am_nightly_and_i_want_fast))]
         memutils::slice::copy_from_slice(&mut buf[..len], x);
-
-        #[cfg(unzrip_i_am_nightly_and_i_want_fast)]
-        memutils::slice::copy_from_slice_nightly(&mut buf[..len], x);
 
         self.0 = y;
         Ok(len)

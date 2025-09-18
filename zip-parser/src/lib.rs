@@ -57,7 +57,7 @@ impl EocdRecord<'_> {
 
     pub fn cd_entries(&self) -> Option<usize> {
         match self {
-            EocdRecord::Zip(eocdr) => eocdr.cd_entries.try_into().ok(),
+            EocdRecord::Zip(eocdr) => Some(<u16 as std::convert::Into<usize>>::into(eocdr.cd_entries)),
             EocdRecord::Zip64(eocdr) => eocdr.cd_entries.try_into().ok()
         }
     }
@@ -424,7 +424,7 @@ impl ZipArchive<'_> {
         Ok(ZipEntries { buf, count, is_zip64 })
     }
 
-    pub fn read<'a>(&'a self, cfh: &CentralFileHeader) -> Result<(LocalFileHeader<'a>, Buf<'_>), Error> {
+    pub fn read<'a>(&'a self, cfh: &CentralFileHeader) -> Result<(LocalFileHeader<'a>, Buf<'a>), Error> {
         let offset: usize = cfh.lfh_offset.try_into()
             .map_err(|_| Error::OffsetOverflow)?;
         let buf = self.buf.get(offset..).ok_or(Error::Eof)?;

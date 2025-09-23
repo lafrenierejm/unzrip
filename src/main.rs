@@ -121,8 +121,10 @@ fn do_entry(
         && buf.is_empty()
     {
         #[cfg(unix)]
-        let name = name.trim_end_with(|c| c == '\\');
-        let path = encoding.decode(name)?;
+        let path = encoding.decode(name.trim_end_with(|c| c == '\\'))?;
+        #[cfg(not(unix))]
+	let path = encoding.decode(&name)?;
+
         do_dir(target_dir, &path)?
     } else {
         let path = encoding.decode(&name)?;

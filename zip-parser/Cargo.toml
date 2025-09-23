@@ -1,5 +1,6 @@
 [package]
 name = "zip-parser"
+description = "Parse Zip contents"
 version = "0.1.0"
 edition = "2021"
 
